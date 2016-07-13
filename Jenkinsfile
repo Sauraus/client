@@ -111,7 +111,7 @@ node("ec2-fleet") {
                                         dir("desktop") {
                                             sh "npm run vendor-install"
                                             sh "unzip ./js-vendor-desktop/flow/flow-linux64*.zip"
-                                            sh "./flow/flow"
+                                            sh "./flow/flow status shared"
                                         }
                                     } else {
                                         dir("desktop") {
