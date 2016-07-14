@@ -30,6 +30,7 @@
 static NSString *const eventName = @"objc-engine-event";
 
 - (instancetype)initWithSettings:(NSDictionary *)settings error:(NSError **)error {
+  NSLog(@"INIT");
   if ((self = [super init])) {
     [self setupKeybaseWithSettings:settings error:error];
     [self setupQueues];
@@ -48,8 +49,10 @@ static NSString *const eventName = @"objc-engine-event";
 }
 
 - (void)startReadLoop {
+  NSLog(@"SRL");
   dispatch_async(self.readQueue, ^{
     while (true) {
+      NSLog(@"SRL Loop");
       NSError *error = nil;
       NSString *data = nil;
       GoKeybaseReadB64(&data, &error);
@@ -64,7 +67,9 @@ static NSString *const eventName = @"objc-engine-event";
 }
 
 - (void)runWithData:(NSString *)data {
+  NSLog(@"RWD");
   dispatch_async(self.writeQueue, ^{
+    NSLog(@"RWD Loop");
     NSError *error = nil;
     GoKeybaseWriteB64(data, &error);
     if (error) {
@@ -74,6 +79,7 @@ static NSString *const eventName = @"objc-engine-event";
 }
 
 - (void)reset {
+  NSLog(@"reset");
   NSError *error = nil;
   GoKeybaseReset(&error);
   if (error) {
