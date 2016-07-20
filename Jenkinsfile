@@ -263,6 +263,12 @@ node("ec2-fleet") {
                     )
             } catch(ex) {
                 sh "docker logs ${kbweb.id}"
+                withCredentials([[$class: 'StringBinding',
+                    credentialsId: 'SLACK_INTEGRATION_TOKEN',
+                    variable: 'SLACK_INTEGRATION_TOKEN',
+                ]]) {
+                        slackSend channel: "#github", color: "danger", message: "<${env.CHANGE_URL}|${env.CHANGE_TITLE}>\n:small_red_triangle: Test failed: <${env.BUILD_URL}|${env.JOB_NAME} ${env.BUILD_DISPLAY_NAME}> by ${env.CHANGE_AUTHOR}", teamDomain: "keybase", token: "${env.SLACK_INTEGRATION_TOKEN}"
+                }
                 throw ex
             } finally {
                 if (kbweb != null) {
